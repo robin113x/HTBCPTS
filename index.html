@@ -1,501 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Network Security Training - Main Index</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<title>Cyber Security Training Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #141d2b;
-            min-height: 100vh;
-            padding: 20px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+<style>
+:root {
+    --bg: #0b1220;
+    --card: #111827;
+    --text: #e5e7eb;
+}
+body.light {
+    --bg: #f3f4f6;
+    --card: #ffffff;
+    --text: #111827;
+}
 
-        body.day-theme {
-            background: #f5f5f5;
-        }
+body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: .3s;
+}
 
-        .top-controls {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-            z-index: 1000;
-        }
+header {
+    padding: 20px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
 
-        .toggle-btn {
-            background: #1b2333;
-            color: #ffffff;
-            border: 1px solid #070223;
-            border-radius: 8px;
-            padding: 12px 20px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+button {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 1.1em;
+}
 
-        body.day-theme .toggle-btn {
-            background: #ffffff;
-            color: #000000;
-            border: 1px solid #cccccc;
-        }
+/* Centered container */
+.wrapper {
+    max-width: 1400px;
+    margin: auto;
+}
 
-        .toggle-btn:hover {
-            background: #252d3f;
-            border-color: #161340;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(7, 2, 35, 0.4);
-        }
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    padding: 20px;
+}
 
-        body.day-theme .toggle-btn:hover {
-            background: #f0f0f0;
-            border-color: #999999;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
+/* Responsive */
+@media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 800px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px)  { .grid { grid-template-columns: 1fr; } }
 
-        .container {
-            background: transparent;
-            border: none;
-            border-radius: 0;
-            box-shadow: none;
-            padding: 60px 40px;
-            max-width: 1400px;
-            width: 100%;
-            margin: 0 auto;
-            text-align: center;
-        }
+.card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 18px;
+    cursor: pointer;
+    transition: .2s;
+    box-shadow: 0 10px 25px rgba(0,0,0,.15);
+    text-align: center;
+}
 
-        h1 {
-            color: #ffffff;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 700;
-            transition: color 0.3s ease;
-        }
+.card:hover { transform: translateY(-6px); }
 
-        body.day-theme h1 {
-            color: #000000;
-        }
+.card img {
+    width: 100%;
+    height: 170px;        /* Increased logo size */
+    object-fit: contain;
+    margin-bottom: 10px;
+}
 
-        .subtitle {
-            color: #cccccc;
-            font-size: 1.1em;
-            margin-bottom: 50px;
-            transition: color 0.3s ease;
-        }
+/* LIST VIEW */
+body.list-view .grid {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
 
-        body.day-theme .subtitle {
-            color: #666666;
-        }
+body.list-view .card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    text-align: left;
+}
 
-        .sections {
-            display: flex;
-            flex-direction: row;
-            gap: 30px;
-            justify-content: center;
-            align-items: stretch;
-        }
-
-        .sections.list-view {
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .sections.list-view .section-link {
-            flex-direction: row;
-            text-align: left;
-            min-height: 120px;
-            padding: 25px 30px;
-        }
-
-        .sections.list-view .logo-img {
-            margin-bottom: 0;
-            margin-right: 25px;
-            max-width: 100px;
-            max-height: 100px;
-        }
-
-        .sections.list-view .section-title {
-            flex: 1;
-        }
-
-        .section-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            min-height: 200px;
-            padding: 40px 25px;
-            background: #1b2333;
-            color: #ffffff;
-            text-decoration: none;
-            border: 1px solid #070223;
-            border-radius: 8px;
-            font-size: 1.1em;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(11, 10, 10, 0.3);
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
-
-        body.day-theme .section-link {
-            background: #ffffff;
-            color: #000000;
-            border: 1px solid #cccccc;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .section-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(22, 19, 64, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .section-link:hover::before {
-            left: 100%;
-        }
-
-        .section-link:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(7, 2, 35, 0.6);
-            background: #252d3f;
-            border-color: #161340;
-        }
-
-        body.day-theme .section-link:hover {
-            background: #f5f5f5;
-            border-color: #999999;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .section-link:active {
-            transform: translateY(-2px);
-        }
-
-        .icon {
-            display: block;
-            margin-bottom: 15px;
-            font-size: 2.5em;
-        }
-
-        .logo-img {
-            display: block;
-            margin-bottom: 15px;
-            max-width: 350px;
-            max-height: 350px;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-        }
-
-        .section-title {
-            font-size: 1em;
-            line-height: 1.4;
-            color: #ffffff;
-            transition: color 0.3s ease;
-        }
-
-        body.day-theme .section-title {
-            color: #000000;
-        }
-
-        @media (max-width: 900px) {
-            .sections {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .section-link {
-                min-height: 150px;
-                padding: 30px 20px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 40px 20px;
-            }
-
-            h1 {
-                font-size: 2em;
-            }
-
-            .section-link {
-                font-size: 1em;
-                padding: 25px 20px;
-            }
-
-            .icon {
-                font-size: 2em;
-            }
-
-            .logo-img {
-                max-width: 300px;
-                max-height: 300px;
-            }
-        }
-    </style>
+body.list-view .card img {
+    width: 160px;        /* Bigger logos in list view */
+    height: 100px;
+}
+</style>
 </head>
+
 <body>
-    <div class="top-controls">
-        <button class="toggle-btn" id="viewToggleBtn" onclick="toggleView()" title="Toggle View">
-            <span id="viewIcon">☰</span>
-        </button>
-        <button class="toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Theme">
-            <span id="themeIcon">🌙</span>
-        </button>
-    </div>
 
-    <div class="container">
-        <h1>Network Security Training</h1>
-        <p class="subtitle">Select a module to begin</p>
-        
-        <div class="sections" id="sectionsContainer">
-            <a href="1.Network Enumeration with Nmap/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/19/logo.png" alt="Network Enumeration Logo" class="logo-img">
-                <span class="section-title">1. Network Enumeration with Nmap</span>
-            </a>
-            
-            <a href="2.Footprinting/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/112/logo.png" alt="Footprinting Logo" class="logo-img">
-                <span class="section-title">2. Footprinting</span>
-            </a>
-            
-            <a href="3.Information Gathering - Web Edition/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/144/logo.png" alt="Information Gathering Logo" class="logo-img">
-                <span class="section-title">3. Information Gathering — Web Edition</span>
-            </a>
-        </div>
+<header class="wrapper">
+    <button id="viewBtn">☰</button>
+    <button id="themeBtn">🌙</button>
+</header>
 
-        <br>
-        <div class="sections">
-            <a href="4.Vulnerability Assessment/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/108/logo.png" alt="Vulnerability Assessment Logo" class="logo-img">
-                <span class="section-title">4. Vulnerability Assessment</span>
-            </a>
-            
-            <a href="5.Web Application Security/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/77/logo.png" alt="Web Application Security Logo" class="logo-img">
-                <span class="section-title">5. Web Application Security</span>
-            </a>
-            
-            <a href="6.Active Directory/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/143/logo.png" alt="Active Directory Logo" class="logo-img">
-                <span class="section-title">6. Active Directory</span>
-            </a>
-        </div>
+<div class="wrapper">
+    <section class="grid" id="grid"></section>
+</div>
 
-        <br>
-        <div class="sections">
-            <a href="7.File Transfers/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/24/logo.png" alt="File Transfers Logo" class="logo-img">
-                <span class="section-title">7. File Transfers</span>
-            </a>
-            
-            <a href="8.Shells and Payloads/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/115/logo.png" alt="Shells and Payloads Logo" class="logo-img">
-                <span class="section-title">8. Shells & Payloads</span>
-            </a>
-            
-            <a href="9.Using the Metasploit Framework/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/25/logo.png" alt="Metasploit Framework Logo" class="logo-img">
-                <span class="section-title">9. Using the Metasploit Framework</span>
-            </a>
-        </div>
+<script>
+const modules = [
+["1.Network Enumeration with Nmap","19"],
+["2.Footprinting","112"],
+["3.Information Gathering - Web Edition","144"],
+["4.Vulnerability Assessment","108"],
+["5.File Transfers","24"],
+["6.Shells & Payloads","115"],
+["7.Using the Metasploit Framework","39"],
+["8.Password attacks","147"],
+["9.Attacking Common Services","27"],
+["10.Pivoting, Tunneling, and Port Forwarding","158"],
+["11.Active Directory Enumeration & Attacks","143"],
+["12.Using Web Proxies","110"],
+["13.Attacking Web Applications with Ffuf","54"],
+["14.Login Brute Forcing","57"],
+["15.SQL Injection Fundamentals","33"],
+["16.SQLMap Essentials","33"],
+["17.Cross-Site Scripting (XSS)","134"],
+["18.File inclusion","109"],
+["19.File Upload Attacks","134"],
+["20.Command Injections","109"],
+["21.Web Attacks","134"],
+["22.Attacking Common Applications","113"],
+["23.Linux Privilege Escalation","51"],
+["24.Windows Privilege Escalation","67"],
+["25.Documentation & Reporting","162"],
+["26.Attacking Enterprise Networks","163"],
+["Wi-Fi Penetration Testing Basics","185"],
+["Attacking Wi-Fi Protected Setup (WPS)","222"]
+];
 
-        <br>
-        <div class="sections">
-            <a href="10.Password Attacks/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/147/logo.png" alt="Password Attacks Logo" class="logo-img">
-                <span class="section-title">10. Password Attacks</span>
-            </a>
-            
-            <a href="11.Attacking Common Services/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/27/logo.png" alt="Attacking Common Services Logo" class="logo-img">
-                <span class="section-title">11. Attacking Common Services</span>
-            </a>
-            
-            <a href="12.Pivoting Tunneling and Port Forwarding/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/158/logo.png" alt="Pivoting Tunneling Logo" class="logo-img">
-                <span class="section-title">12. Pivoting, Tunneling, and Port Forwarding</span>
-            </a>
-        </div>
+const grid = document.getElementById("grid");
+const themeBtn = document.getElementById("themeBtn");
+const viewBtn = document.getElementById("viewBtn");
 
-        <br>
-        <div class="sections">
-            <a href="13.Using Web Proxies/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/110/logo.png" alt="Using Web Proxies Logo" class="logo-img">
-                <span class="section-title">13. Using Web Proxies</span>
-            </a>
-            
-            <a href="14.Attacking Web Applications with Ffuf/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/54/logo.png" alt="Ffuf Logo" class="logo-img">
-                <span class="section-title">14. Attacking Web Applications with Ffuf</span>
-            </a>
-            
-            <a href="15.Login Brute Forcing/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/57/logo.png" alt="Login Brute Forcing Logo" class="logo-img">
-                <span class="section-title">15. Login Brute Forcing</span>
-            </a>
-        </div>
+function render(){
+    grid.innerHTML="";
+    modules.forEach(([name,logo])=>{
+        const card=document.createElement("div");
+        card.className="card";
+        card.innerHTML = `
+            <img src="https://academy.hackthebox.com/storage/modules/${logo}/logo.png">
+            <h4>${name}</h4>
+        `;
+        card.onclick=()=> window.open(name + "/index.html", "_blank");
+        grid.appendChild(card);
+    });
+}
 
-        <br>
-        <div class="sections">
-            <a href="16.SQL Injection Fundamentals/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/33/logo.png" alt="SQL Injection Logo" class="logo-img">
-                <span class="section-title">16. SQL Injection Fundamentals</span>
-            </a>
-            
-            <a href="17.File Upload Attacks/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/134/logo.png" alt="File Upload Attacks Logo" class="logo-img">
-                <span class="section-title">17. File Upload Attacks</span>
-            </a>
-            
-            <a href="18.Command Injections/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/109/logo.png" alt="Command Injections Logo" class="logo-img">
-                <span class="section-title">18. Command Injections</span>
-            </a>
-        </div>
+render();
 
-        <br>
-        <div class="sections">
-            <a href="19.Web Attacks/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/134/logo.png" alt="Web Attacks Logo" class="logo-img">
-                <span class="section-title">19. Web Attacks</span>
-            </a>
-            
-            <a href="20.Attacking Common Applications/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/113/logo.png" alt="Attacking Common Applications Logo" class="logo-img">
-                <span class="section-title">20. Attacking Common Applications</span>
-            </a>
-            
-            <a href="21.Linux Privilege Escalation/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/51/logo.png" alt="Linux Privilege Escalation Logo" class="logo-img">
-                <span class="section-title">21. Linux Privilege Escalation</span>
-            </a>
-        </div>
+function applyTheme(){
+    const t = localStorage.getItem("theme") || "dark";
+    document.body.classList.toggle("light", t==="light");
+    themeBtn.textContent = t==="light" ? "☀️" : "🌙";
+}
 
-        <br>
-        <div class="sections">
-            <a href="22.Windows Privilege Escalation/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/67/logo.png" alt="Windows Privilege Escalation Logo" class="logo-img">
-                <span class="section-title">22. Windows Privilege Escalation</span>
-            </a>
-            
-            <a href="23.Active Directory/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/143/logo.png" alt="Active Directory Logo" class="logo-img">
-                <span class="section-title">23. Active Directory</span>
-            </a>
-            
-            <a href="24.Documentation and Reporting/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/162/logo.png" alt="Documentation and Reporting Logo" class="logo-img">
-                <span class="section-title">24. Documentation & Reporting</span>
-            </a>
-        </div>
+function applyView(){
+    const v = localStorage.getItem("view") || "grid";
+    document.body.classList.toggle("list-view", v==="list");
+    viewBtn.textContent = v==="list" ? "⊞" : "☰";
+}
 
-        <br>
-        <div class="sections">
-            <a href="25.Linux Fundamentals/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/18/logo.png" alt="Linux Fundamentals Logo" class="logo-img">
-                <span class="section-title">25. Linux Fundamentals</span>
-            </a>
-            
-            <a href="26.Windows Fundamentals/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/20/logo.png" alt="Windows Fundamentals Logo" class="logo-img">
-                <span class="section-title">26. Windows Fundamentals</span>
-            </a>
-            
-            <a href="27.Introduction to Networking/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/34/logo.png" alt="Introduction to Networking Logo" class="logo-img">
-                <span class="section-title">27. Introduction to Networking</span>
-            </a>
-        </div>
+viewBtn.onclick=()=>{
+    const v = document.body.classList.contains("list-view") ? "grid" : "list";
+    localStorage.setItem("view", v);
+    applyView();
+};
 
-        <br>
-        <div class="sections">
-            <a href="28.Web Requests/index.html" target="_blank" class="section-link">
-                <img src="https://academy.hackthebox.com/storage/modules/35/logo.png" alt="Web Requests Logo" class="logo-img">
-                <span class="section-title">28. Web Requests</span>
-            </a>
-        </div>
+themeBtn.onclick=()=>{
+    const t = document.body.classList.contains("light") ? "dark" : "light";
+    localStorage.setItem("theme", t);
+    applyTheme();
+};
 
-
-
-
-    </div>
-
-    <script>
-        // Load saved preferences
-        const savedView = localStorage.getItem('viewMode') || 'grid';
-        const savedTheme = localStorage.getItem('theme') || 'night';
-        
-        // Toggle view function
-        function toggleView() {
-            const containers = document.querySelectorAll('.sections');
-            const viewIcon = document.getElementById('viewIcon');
-            const currentView = containers[0].classList.contains('list-view') ? 'list' : 'grid';
-            
-            containers.forEach(container => {
-                if (currentView === 'grid') {
-                    container.classList.add('list-view');
-                    viewIcon.textContent = '⊞';
-                } else {
-                    container.classList.remove('list-view');
-                    viewIcon.textContent = '☰';
-                }
-            });
-            
-            const newView = currentView === 'grid' ? 'list' : 'grid';
-            localStorage.setItem('viewMode', newView);
-        }
-        
-        // Toggle theme function
-        function toggleTheme() {
-            const body = document.body;
-            const themeIcon = document.getElementById('themeIcon');
-            const isDayTheme = body.classList.contains('day-theme');
-            
-            if (isDayTheme) {
-                body.classList.remove('day-theme');
-                themeIcon.textContent = '🌙';
-                localStorage.setItem('theme', 'night');
-            } else {
-                body.classList.add('day-theme');
-                themeIcon.textContent = '☀️';
-                localStorage.setItem('theme', 'day');
-            }
-        }
-        
-        // Apply saved preferences on page load
-        if (savedView === 'list') {
-            toggleView();
-        }
-        
-        if (savedTheme === 'day') {
-            toggleTheme();
-        }
-    </script>
+applyTheme();
+applyView();
+</script>
 </body>
 </html>
-
